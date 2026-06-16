@@ -1,0 +1,245 @@
+#!/usr/bin/env node
+
+import { mkdir, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const USER = "darkyzowo";
+const MODULES = ["VenderScope", "ContraAI", "ZARAK_OS"];
+const OUTPUT = join(dirname(fileURLToPath(import.meta.url)), "../../dist/operator-gateway.svg");
+
+const esc = (value) =>
+  String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+
+function relativeTime(isoDate) {
+  if (!isoDate) return "unknown";
+  const deltaMs = Date.now() - new Date(isoDate).getTime();
+  const minutes = Math.floor(deltaMs / 60000);
+  if (minutes < 60) return `${Math.max(minutes, 1)}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 48) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 14) return `${days}d ago`;
+  const weeks = Math.floor(days / 7);
+  return `${weeks}w ago`;
+}
+
+async function fetchJson(url, token) {
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/vnd.github+json",
+      "User-Agent": "darkyzowo-operator-gateway",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`GitHub API ${response.status} for ${url}`);
+  }
+
+  return response.json();
+}
+
+async function loadTelemetry(token) {
+  const headers = token ? {} : {};
+  void headers;
+
+  const user = await fetchJson(`https://api.github.com/users/${USER}`, token);
+  const repos = await fetchJson(
+    `https://api.github.com/users/${USER}/repos?sort=pushed&per_page=100&type=owner`,
+    token,
+  );
+
+  const latestPush = repos.reduce((latest, repo) => {
+    const pushed = repo.pushed_at ? new Date(repo.pushed_at).getTime() : 0;
+    return pushed > latest ? pushed : latest;
+  }, 0);
+
+  const stars = repos.reduce((sum, repo) => sum + (repo.stargazers_count ?? 0), 0);
+  const updatedAt = new Date().toISOString().slice(0, 16).replace("T", " ");
+
+  return {
+    publicRepos: user.public_repos ?? repos.length,
+    lastSignal: relativeTime(latestPush ? new Date(latestPush).toISOString() : null),
+    modules: MODULES.length,
+    stars,
+    updatedAt,
+  };
+}
+
+function buildSvg({ publicRepos, lastSignal, modules, stars, updatedAt }) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 420" role="img" aria-label="Syed Zarak Hassan, ZARAK OS Operator Gateway" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#151523"/>
+      <stop offset="100%" stop-color="#0B0F17"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#89B4FA" stop-opacity="0.55"/>
+      <stop offset="45%" stop-color="#CBA6F7" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#F38BA8" stop-opacity="0.55"/>
+    </linearGradient>
+    <linearGradient id="name" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#CDD6F4"/>
+      <stop offset="55%" stop-color="#CBA6F7"/>
+      <stop offset="100%" stop-color="#F5C2E7"/>
+    </linearGradient>
+    <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#CBA6F7" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#CBA6F7" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#CBA6F7" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%" r="48%">
+      <stop offset="0%" stop-color="#CBA6F7" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#CBA6F7" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="topSweep">
+      <rect x="24" y="68" width="1552" height="8"/>
+    </clipPath>
+    <style>
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      .fade {
+        opacity: 0;
+        animation: fadeIn 0.45s ease-out forwards;
+      }
+      .fade-1 { animation-delay: 0.1s; }
+      .fade-2 { animation-delay: 0.28s; }
+      .fade-3 { animation-delay: 0.46s; }
+      .fade-4 { animation-delay: 0.64s; }
+      .fade-5 { animation-delay: 0.82s; }
+      .fade-6 { animation-delay: 1.0s; }
+      .fade-7 { animation-delay: 1.18s; }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .cursor {
+        animation: blink 1.05s steps(2, start) infinite;
+      }
+      @keyframes blink {
+        0%, 50% { opacity: 1; }
+        50.01%, 100% { opacity: 0; }
+      }
+      .sweep {
+        animation: sweep 8.5s linear infinite;
+      }
+      @keyframes sweep {
+        0% { transform: translateX(-320px); }
+        100% { transform: translateX(1600px); }
+      }
+      .pulse {
+        animation: pulse 2.4s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 0.72; }
+        50% { opacity: 1; }
+      }
+      .dock-a { animation: dock 7s ease-in-out infinite; }
+      .dock-b { animation: dock 8.5s ease-in-out infinite 0.4s; }
+      .dock-c { animation: dock 9.2s ease-in-out infinite 0.8s; }
+      @keyframes dock {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .fade, .cursor, .sweep, .pulse, .dock-a, .dock-b, .dock-c {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </defs>
+
+  <rect width="1600" height="420" rx="24" fill="url(#bg)"/>
+  <rect width="1600" height="420" rx="24" fill="url(#glow)"/>
+  <rect x="0.5" y="0.5" width="1599" height="419" rx="24" fill="none" stroke="#313244"/>
+  <rect x="12" y="12" width="1576" height="396" rx="18" fill="none" stroke="url(#frame)" stroke-width="1.2" stroke-opacity="0.55"/>
+
+  <g transform="translate(34,28)">
+    <circle cx="0" cy="0" r="6.5" fill="#F38BA8"/>
+    <circle cx="22" cy="0" r="6.5" fill="#F9E2AF"/>
+    <circle cx="44" cy="0" r="6.5" fill="#A6E3A1"/>
+  </g>
+
+  <g transform="translate(118,18)">
+    <rect width="420" height="24" rx="7" fill="#11111B" stroke="#313244"/>
+    <text x="210" y="16" text-anchor="middle" class="mono" font-size="11" fill="#7F849C">~/zarak_os/operator-gateway</text>
+  </g>
+
+  <text x="1566" y="36" text-anchor="end" class="mono" font-size="10" fill="#585B70">sync ${esc(updatedAt)} UTC</text>
+
+  <g clip-path="url(#topSweep)">
+    <rect class="sweep" x="0" y="68" width="320" height="3" fill="url(#sweep)"/>
+  </g>
+
+  <line x1="24" y1="72" x2="1576" y2="72" stroke="#313244" stroke-opacity="0.9"/>
+
+  <g class="mono" font-size="11" fill="#585B70" transform="translate(42, 98)">
+    <text y="0" class="fade fade-1">$ ./init zarak_os --gateway</text>
+    <text y="18" class="fade fade-2"><tspan fill="#6C7086">[ ok ]</tspan> grc.engine</text>
+    <text y="36" class="fade fade-3"><tspan fill="#6C7086">[ ok ]</tspan> vendor.portfolio</text>
+    <text y="54" class="fade fade-4"><tspan fill="#6C7086">[ ok ]</tspan> customer.trust</text>
+    <text y="72" class="fade fade-5"><tspan fill="#6C7086">[ ok ]</tspan> build.modules</text>
+    <text y="90" class="fade fade-6"><tspan fill="#6C7086">[ sys ]</tspan> <tspan fill="#A6E3A1">gateway online</tspan></text>
+    <text y="108" class="fade fade-7"><tspan fill="#CBA6F7">operator@zarak_os</tspan><tspan class="cursor" fill="#CBA6F7"> █</tspan></text>
+  </g>
+
+  <g class="mono" font-size="11" fill="#585B70" transform="translate(1558, 98)" text-anchor="end">
+    <text y="0" class="fade fade-2">node . nottingham-uk</text>
+    <text y="18" class="fade fade-3">role . compliance.analyst</text>
+    <text y="36" class="fade fade-4">repos . ${esc(publicRepos)} public</text>
+    <text y="54" class="fade fade-5">stars . ${esc(stars)}</text>
+    <text y="72" class="fade fade-6">signal . ${esc(lastSignal)}</text>
+    <text y="90" class="fade fade-7">modules . ${esc(modules)} active</text>
+    <text y="108"><tspan fill="#A6E3A1" class="pulse">status . open_to_roles</tspan></text>
+  </g>
+
+  <g text-anchor="middle">
+    <text x="800" y="118" class="mono" font-size="13" fill="#CBA6F7" letter-spacing="4">ZARAK_OS  //  OPERATOR GATEWAY</text>
+    <text x="800" y="196" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="68" font-weight="800" fill="url(#name)" letter-spacing="2">SYED ZARAK HASSAN</text>
+    <text x="800" y="236" class="mono" font-size="14" fill="#A6ADC8" letter-spacing="5">GRC · CUSTOMER TRUST · SECURITY TOOLING · BUILDER</text>
+    <text x="800" y="266" class="mono" font-size="12" fill="#6C7086">vendor risk · compliance evidence · trust operations · useful tooling</text>
+  </g>
+
+  <g transform="translate(0, 292)">
+    <rect x="470" y="0" width="220" height="54" rx="14" fill="#11111B" stroke="#45475A" class="dock-a"/>
+    <rect x="710" y="0" width="220" height="54" rx="14" fill="#11111B" stroke="#45475A" class="dock-b"/>
+    <rect x="950" y="0" width="220" height="54" rx="14" fill="#11111B" stroke="#CBA6F7" stroke-opacity="0.45" class="dock-c"/>
+    <text x="580" y="32" text-anchor="middle" class="mono" font-size="13" fill="#89B4FA">VenderScope</text>
+    <text x="820" y="32" text-anchor="middle" class="mono" font-size="13" fill="#F5C2E7">ContraAI</text>
+    <text x="1060" y="32" text-anchor="middle" class="mono" font-size="13" fill="#CBA6F7">ZARAK_OS</text>
+    <text x="580" y="48" text-anchor="middle" class="mono" font-size="9" fill="#585B70">vendor.risk</text>
+    <text x="820" y="48" text-anchor="middle" class="mono" font-size="9" fill="#585B70">contract.ai</text>
+    <text x="1060" y="48" text-anchor="middle" class="mono" font-size="9" fill="#585B70">portfolio.os</text>
+  </g>
+
+  <g class="mono" font-size="10" fill="#45475A" transform="translate(42, 382)">
+    <text>telemetry.live · repos=${esc(publicRepos)} · signal=${esc(lastSignal)} · modules=${esc(modules)} · enter via portfolio badge</text>
+  </g>
+</svg>`;
+}
+
+async function main() {
+  const token = process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN ?? "";
+  const telemetry = await loadTelemetry(token);
+  const svg = buildSvg(telemetry);
+
+  await mkdir(dirname(OUTPUT), { recursive: true });
+  await writeFile(OUTPUT, svg, "utf8");
+
+  console.log(`Wrote ${OUTPUT}`);
+  console.log(JSON.stringify(telemetry, null, 2));
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

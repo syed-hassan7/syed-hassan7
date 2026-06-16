@@ -1,18 +1,12 @@
 <div align="center">
 
-<img
-  src="./assets/ascii-portrait-variant-zarak-os.svg"
-  alt="ASCII portrait of Syed Zarak Hassan"
-  width="520"
-/>
-
-<br />
-
-<samp>
-  <b>SYED ZARAK HASSAN</b>
-  <br />
-  GRC · Customer Trust · Security Tooling · Builder
-</samp>
+<a href="https://zarak-os.vercel.app">
+  <img
+    src="https://raw.githubusercontent.com/darkyzowo/darkyzowo/output/operator-gateway.svg"
+    alt="ZARAK_OS Operator Gateway — Syed Zarak Hassan"
+    width="100%"
+  />
+</a>
 
 <br />
 <br />
@@ -162,10 +156,15 @@ and building a cleaner way through.
 
 <div align="center">
 
+<samp>contribution trail · evidence grid · updated every 12h</samp>
+
+<br />
+<br />
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/darkyzowo/darkyzowo/output/github-contribution-grid-snake-dark.svg" />
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/darkyzowo/darkyzowo/output/github-contribution-grid-snake.svg" />
-  <img alt="github contribution snake" src="https://raw.githubusercontent.com/darkyzowo/darkyzowo/output/github-contribution-grid-snake-dark.svg" />
+  <img alt="GitHub contribution snake eating through the contribution grid" src="https://raw.githubusercontent.com/darkyzowo/darkyzowo/output/github-contribution-grid-snake-dark.svg" />
 </picture>
 
 </div>

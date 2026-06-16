@@ -1,4 +1,4 @@
-name: Generate Snake
+name: Generate Profile Assets
 
 on:
   schedule:
@@ -16,6 +16,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate operator gateway SVG
+        run: node .github/scripts/generate-operator-gateway.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Generate snake SVG
         uses: Platane/snk/svg-only@v3
         with:
@@ -24,7 +32,7 @@ jobs:
             dist/github-contribution-grid-snake.svg
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark
 
-      - name: Push snake to output branch
+      - name: Push profile assets to output branch
         uses: crazy-max/ghaction-github-pages@v3.1.0
         with:
           target_branch: output
