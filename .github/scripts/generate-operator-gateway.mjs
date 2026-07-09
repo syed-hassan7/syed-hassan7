@@ -4,7 +4,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const USER = "darkyzowo";
+const USER = "syed-hassan7";
 const MODULES = ["VenderScope", "ContraAI", "ZARAK_OS"];
 const OUTPUT = join(dirname(fileURLToPath(import.meta.url)), "../../dist/operator-gateway.svg");
 
@@ -33,7 +33,7 @@ async function fetchJson(url, token) {
   const response = await fetch(url, {
     headers: {
       Accept: "application/vnd.github+json",
-      "User-Agent": "darkyzowo-operator-gateway",
+      "User-Agent": "syed-hassan7-operator-gateway",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
   });

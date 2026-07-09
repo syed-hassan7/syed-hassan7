@@ -2,7 +2,7 @@
 
 <a href="https://zarak-os.vercel.app">
   <img
-    src="https://raw.githubusercontent.com/darkyzowo/darkyzowo/output/operator-gateway.svg"
+    src="https://raw.githubusercontent.com/syed-hassan7/syed-hassan7/output/operator-gateway.svg"
     alt="ZARAK_OS Operator Gateway — Syed Zarak Hassan"
     width="100%"
   />
@@ -24,7 +24,7 @@
 <a href="https://zarak-os.vercel.app">
   <img src="https://img.shields.io/badge/Portfolio-313244?style=for-the-badge&logo=vercel&logoColor=CBA6F7" alt="Portfolio" />
 </a>
-<a href="https://github.com/darkyzowo/zarak-os">
+<a href="https://github.com/syed-hassan7/zarak-os">
   <img src="https://img.shields.io/badge/ZARAK__OS-CBA6F7?style=for-the-badge&logoColor=11111B&color=CBA6F7&labelColor=CBA6F7" alt="ZARAK_OS" />
 </a>
 <a href="mailto:syedzrk1000@gmail.com">
@@ -91,9 +91,9 @@ currently_building:
 
 | Product | Why it exists | Stack |
 |--------|---------------|-------|
-| [**VenderScope**](https://github.com/darkyzowo/venderscope) | Built from the pain of handling vendor risk manually across 50+ vendors. Designed to turn point-in-time reviews into continuous vendor risk intelligence. | JavaScript |
-| [**ContraAI**](https://github.com/darkyzowo/contraai) | AI-assisted contract review platform built to make clause analysis faster, clearer, and more structured. | Next.js · Claude API |
-| [**ZARAK_OS**](https://github.com/darkyzowo/zarak-os) | Cyber-noir portfolio OS built to present my work like an interactive environment rather than a static site. | TypeScript · Three.js |
+| [**VenderScope**](https://github.com/syed-hassan7/venderscope) | Built from the pain of handling vendor risk manually across 50+ vendors. Designed to turn point-in-time reviews into continuous vendor risk intelligence. | JavaScript |
+| [**ContraAI**](https://github.com/syed-hassan7/contraai) | AI-assisted contract review platform built to make clause analysis faster, clearer, and more structured. | Next.js · Claude API |
+| [**ZARAK_OS**](https://github.com/syed-hassan7/zarak-os) | Cyber-noir portfolio OS built to present my work like an interactive environment rather than a static site. | TypeScript · Three.js |
 
 ---
 
@@ -162,9 +162,9 @@ and building a cleaner way through.
 <br />
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/darkyzowo/darkyzowo/output/github-contribution-grid-snake-dark.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/darkyzowo/darkyzowo/output/github-contribution-grid-snake.svg" />
-  <img alt="GitHub contribution snake eating through the contribution grid" src="https://raw.githubusercontent.com/darkyzowo/darkyzowo/output/github-contribution-grid-snake-dark.svg" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/syed-hassan7/syed-hassan7/output/github-contribution-grid-snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/syed-hassan7/syed-hassan7/output/github-contribution-grid-snake.svg" />
+  <img alt="GitHub contribution snake eating through the contribution grid" src="https://raw.githubusercontent.com/syed-hassan7/syed-hassan7/output/github-contribution-grid-snake-dark.svg" />
 </picture>
 
 </div>
