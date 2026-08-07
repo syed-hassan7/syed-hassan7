@@ -92,7 +92,7 @@ currently_building:
 | Product | Why it exists | Stack |
 |--------|---------------|-------|
 | [**VenderScope**](https://github.com/syed-hassan7/venderscope) | Built from the pain of handling vendor risk manually across 50+ vendors. Designed to turn point-in-time reviews into continuous vendor risk intelligence. | JavaScript |
-| [**ContraAI**](https://github.com/syed-hassan7/contraai) | AI-assisted contract review platform built to make clause analysis faster, clearer, and more structured. | Next.js · Claude API |
+| [**ContraAI**] | AI-assisted contract review platform built to make clause analysis faster, clearer, and more structured. | Next.js · Claude API |
 | [**ZARAK_OS**](https://github.com/syed-hassan7/zarak-os) | Cyber-noir portfolio OS built to present my work like an interactive environment rather than a static site. | TypeScript · Three.js |
 
 ---
